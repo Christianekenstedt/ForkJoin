@@ -17,7 +17,7 @@ public class Main {
         QuickSort.sort(quickArray);
 
         System.out.println("MergeArray sorted = " + checkIfSorted(mergeArray));
-        System.out.println("QuickArray sorted = " +checkIfSorted(quickArray));
+        System.out.println("QuickArray sorted = " + checkIfSorted(quickArray));
 
 
 

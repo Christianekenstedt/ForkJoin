@@ -13,14 +13,11 @@ public class Main {
             quickArray[i] = (float)Math.random();
         }
 
-        System.out.println("mergeArray " + Arrays.toString(mergeArray));
-        System.out.println("quickArray " + Arrays.toString(quickArray));
-
         MergeSort.sort(mergeArray);
         QuickSort.sort(quickArray);
 
-        System.out.println(checkIfSorted(mergeArray) + " - mergeArray " + Arrays.toString(mergeArray));
-        System.out.println(checkIfSorted(quickArray) + " - quickArray " + Arrays.toString(quickArray));
+        System.out.println("MergeArray sorted = " + checkIfSorted(mergeArray));
+        System.out.println("QuickArray sorted = " +checkIfSorted(quickArray));
 
 
 

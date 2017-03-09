@@ -5,58 +5,40 @@ import java.util.List;
  * Created by Anton on 2017-03-09.
  */
 public class PerformanceTester {
-    private float[] templateArray;
 
-    public PerformanceTester(int length){
-        templateArray = new float[length];
+    public static PerformanceResult test(int length, int cores, SortStrategy sortStrategy, int iterations, String name){
+        ArrayList<PerformanceIteration> performanceIterations = new ArrayList<>();
 
-        for(int i = 0; i < templateArray.length; i++){
-            templateArray[i] = (float)Math.random();
-        }
-    }
+        //warmup
+        test(length, cores, sortStrategy);
 
-    public List<PerformanceResult> test(int cores, SortStrategy sortStrategy, int iterations){
-        ArrayList<PerformanceResult> results = new ArrayList<>();
-        System.out.println("Warmup...");
-        test(cores, sortStrategy);
-
-        System.out.println("Sorting...");
-
-        for(int i = 0; i < iterations+1;i++){
-            if (i !=0){
-                results.add(test(cores, sortStrategy));
-                System.out.println((i)+"/"+iterations + "("+(int)((((float)(i)/(float)iterations)*100))+"%)");
-            }else{
-                test(cores, sortStrategy);
-                test(cores, sortStrategy);
-            }
-
+        for(int i = 0; i < iterations;i++){
+            performanceIterations.add(test(length, cores, sortStrategy));
+            System.out.println((i+1)+"/"+iterations + "("+(int)((((float)(i+1)/(float)iterations)*100))+"%)");
         }
 
-        System.out.println("Array sorted.");
-        return results;
+        PerformanceResult pr = new PerformanceResult(performanceIterations, cores, length, name);
+
+        return pr;
     }
 
-    public PerformanceResult test(int cores, SortStrategy sortStrategy){
+    private static PerformanceIteration test(int length, int cores, SortStrategy sortStrategy){
         garbageCollect();
 
-        float[] arr = new float[templateArray.length];
-
-        System.arraycopy(templateArray, 0, arr, 0, templateArray.length);
-
-        PerformanceResult pr = new PerformanceResult();
+        float[] arr = generateArray(length);
 
         long startTimeNS = System.nanoTime();
 
         sortStrategy.sort(arr, cores);
 
-        pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
+        long elapsedTime = System.nanoTime() - startTimeNS;
 
-        pr.sorted = checkIfSorted(arr);
-        return pr;
+        PerformanceIteration pi = new PerformanceIteration(elapsedTime, checkIfSorted(arr));
+
+        return pi;
     }
 
-    private void garbageCollect(){
+    private static void garbageCollect(){
 
         System.gc();
 
@@ -65,6 +47,15 @@ public class PerformanceTester {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private static float[] generateArray(int length){
+        float[]arr = new float[length];
+
+        for(int i = 0; i < arr.length; i++)
+            arr[i] = (float)Math.random();
+
+        return arr;
     }
 
     public static boolean checkIfSorted(float[] arr){

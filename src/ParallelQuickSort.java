@@ -6,7 +6,7 @@ import java.util.concurrent.RecursiveTask;
 /**
  * Created by Anton on 2017-03-09.
  */
-public class ParallellQuickSort implements SortStrategy{
+public class ParallelQuickSort implements SortStrategy{
     @Override
     public float[] sort(float[] a, int cores) {
         ForkJoinPool forkJoinPool = new ForkJoinPool(cores);
@@ -28,7 +28,7 @@ public class ParallellQuickSort implements SortStrategy{
 
 
     private class QuickSortTask extends RecursiveTask<float[]> {
-        int threshold = 3000;
+        int threshold = 4000;
 
         float[] start_a;
         int start_first, start_last;

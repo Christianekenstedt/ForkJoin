@@ -1,72 +1,31 @@
-import sun.misc.Perf;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 public class Main {
 
     public static void main(String[] args) {
         int arrayLength = (int)1E8;                       //length of array
-        int iterations = 20;                               //number of iterations to test
-        SortStrategy strategy = new ParallelMergeSort(); //sorting strategy to use
-        String fileName = "PQuickSort";                   //save results with this filename
+        int iterations = 20;                              //number of iterations to test
 
-        PerformanceTester pt = new PerformanceTester(arrayLength);
-        ArrayList<PerformanceResult> results = new ArrayList<>();
+        long start = System.nanoTime();
 
-        /*
-        results.addAll(pt.test(1, strategy, iterations));
-        printToFile(results, fileName+"_c1");
+        PerformanceTester.test(arrayLength, 1, new ParallelQuickSort(), iterations, "ParallelQuickSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 2, new ParallelQuickSort(), iterations, "ParallelQuickSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 4, new ParallelQuickSort(), iterations, "ParallelQuickSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 6, new ParallelQuickSort(), iterations, "ParallelQuickSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 8, new ParallelQuickSort(), iterations, "ParallelQuickSort").saveAsFile();
 
-        results.clear();
-        results.addAll(pt.test(2, new ParallelMergeSort(), iterations));
-        printToFile(results, fileName+"_c2");
+        PerformanceTester.test(arrayLength, 1, new ParallelMergeSort(), iterations, "ParallelMergeSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 2, new ParallelMergeSort(), iterations, "ParallelMergeSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 4, new ParallelMergeSort(), iterations, "ParallelMergeSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 6, new ParallelMergeSort(), iterations, "ParallelMergeSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 8, new ParallelMergeSort(), iterations, "ParallelMergeSort").saveAsFile();
 
-        results.clear();
-        results.addAll(pt.test(4, new ParallelMergeSort(), iterations));
-        printToFile(results, fileName+"_c4");
+        PerformanceTester.test(arrayLength, 1, new MergeSort(), iterations, "MergeSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 1, new QuickSort(), iterations, "QuickSort").saveAsFile();
 
-        results.clear();
-        results.addAll(pt.test(6, new ParallelMergeSort(), iterations));
-        printToFile(results, fileName+"_c6");
+        PerformanceTester.test(arrayLength, 1, new JavaParallellSort(), iterations, "JavaParallelSort").saveAsFile();
+        PerformanceTester.test(arrayLength, 1, new JavaSort(), iterations, "JavaQuickSort").saveAsFile();
 
-        results.clear();
-        results.addAll(pt.test(8, new ParallelMergeSort(), iterations));
-        printToFile(results, fileName+"_c8");
-        */
-
-        results.addAll(pt.test(4, new ParallellQuickSort(),iterations));
-
-        float sum = 0, counter=0;
-        for(PerformanceResult pr : results){
-            sum+=pr.elapsedTimeNanoSec;
-            counter++;
-        }
-
-        System.out.println(sum/counter);
-
+        System.out.println("Tests complete! Time: " + (System.nanoTime()-start));
     }
 
-
-    private static void printToFile(List<PerformanceResult> results, String name){
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH_mm_ss");
-        try {
-            FileWriter fw = new FileWriter( name + "_"+ df.format(new Date())+".txt");
-
-            for(PerformanceResult pr : results){
-                fw.write(pr.elapsedTimeNanoSec+";");
-            }
-
-            fw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

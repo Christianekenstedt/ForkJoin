@@ -45,6 +45,4 @@ public class QuickSort implements SortStrategy {
 
         return down;
     }
-
-
 }

@@ -1,3 +1,5 @@
+import sun.misc.Perf;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -9,17 +11,15 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-
         int arrayLength = (int)1E8;                       //length of array
         int iterations = 20;                               //number of iterations to test
         SortStrategy strategy = new ParallelMergeSort(); //sorting strategy to use
-        String fileName = "PMergeSort";                   //save results with this filename
-
-
+        String fileName = "PQuickSort";                   //save results with this filename
 
         PerformanceTester pt = new PerformanceTester(arrayLength);
         ArrayList<PerformanceResult> results = new ArrayList<>();
 
+        /*
         results.addAll(pt.test(1, strategy, iterations));
         printToFile(results, fileName+"_c1");
 
@@ -38,6 +38,17 @@ public class Main {
         results.clear();
         results.addAll(pt.test(8, new ParallelMergeSort(), iterations));
         printToFile(results, fileName+"_c8");
+        */
+
+        results.addAll(pt.test(4, new ParallellQuickSort(),iterations));
+
+        float sum = 0, counter=0;
+        for(PerformanceResult pr : results){
+            sum+=pr.elapsedTimeNanoSec;
+            counter++;
+        }
+
+        System.out.println(sum/counter);
 
     }
 

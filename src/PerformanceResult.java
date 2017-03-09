@@ -6,6 +6,6 @@ public class PerformanceResult{
     public boolean sorted;
 
     public String toString(){
-        return "Time(ns): " + elapsedTimeNanoSec + "\nSorted: " + true;
+        return "Time(s): " + elapsedTimeNanoSec/1.0E9 + "\nSorted: " + true;
     }
 }

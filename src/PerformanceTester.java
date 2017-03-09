@@ -10,9 +10,21 @@ public class PerformanceTester {
         for(int i = 0; i < templateArray.length; i++){
             templateArray[i] = (float)Math.random();
         }
+        System.out.println("Array initialized");
     }
 
     public PerformanceResult test(int cores, SortType sortType){
+
+        System.out.println("Collecting garbage...");
+        System.gc();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
 
         PerformanceResult pr = new PerformanceResult();
 
@@ -21,28 +33,29 @@ public class PerformanceTester {
         System.arraycopy(templateArray, 0, arr, 0, templateArray.length);
 
 
-
         long startTimeNS;
+
+        System.out.println("Starting " + sortType.toString());
 
         switch(sortType){
             case QUICK_SORT:
                 startTimeNS = System.nanoTime();
-                QuickSort.sort(templateArray);
+                QuickSort.sort(arr);
                 pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
                 break;
             case MERGE_SORT:
                 startTimeNS = System.nanoTime();
-                MergeSort.sort(templateArray);
+                MergeSort.sort(arr);
                 pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
                 break;
             case JAVA_PARALLELL_SORT:
                 startTimeNS = System.nanoTime();
-                java.util.Arrays.parallelSort(templateArray);
+                java.util.Arrays.parallelSort(arr);
                 pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
                 break;
             case JAVA_SORT:
                 startTimeNS = System.nanoTime();
-                java.util.Arrays.sort(templateArray);
+                java.util.Arrays.sort(arr);
                 pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
                 break;
             default:
@@ -50,8 +63,10 @@ public class PerformanceTester {
                 break;
         }
 
-        pr.sorted = checkIfSorted(templateArray);
+        pr.sorted = checkIfSorted(arr);
 
+
+        System.out.println("Completed!\n");
         return pr;
     }
 

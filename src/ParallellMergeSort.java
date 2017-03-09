@@ -1,46 +1,33 @@
 import java.util.Arrays;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 
 /**
  * Created by Christian & Anton 2017-03-09
  */
 public class ParallellMergeSort {
-    public static float[] sort(float[] a){
 
-        if (a.length == 1) return a;
+    public static float[] sort(float[] a, int cores){
 
-        float[] b = new float[a.length/2];
-        float[] c = new float[a.length-b.length];
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
 
-        System.arraycopy(a, 0, b, 0, b.length);
-        System.arraycopy(a, b.length, c, 0, c.length);
+        MergeSortTask rootTask = new MergeSortTask(a);
 
-        sort(b);
-        sort(c);
+        forkJoinPool.invoke(rootTask);
 
-        return merge(b,c,a);
+        try {
+            return rootTask.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    private static float[] merge(float[] a, float[] b, float[]c){
-        int indexa=0, indexb=0, indexc=0;
 
-        while (indexa < a.length && indexb < b.length){
-            if (a[indexa] <= b[indexb]){
-                c[indexc++] = a[indexa];
-                indexa++;
-            }else {
-                c[indexc++] = b[indexb];
-                indexb++;
-            }
-        }
-        while (indexa<a.length){
-            c[indexc++]=a[indexa];
-            indexa++;
-        }
-        while (indexb<b.length){
-            c[indexc++]=b[indexb];
-            indexb++;
-        }
-        return c;
-    }
+
 
 }

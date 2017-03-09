@@ -68,6 +68,11 @@ public class PerformanceTester {
                 java.util.Arrays.sort(arr);
                 pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
                 break;
+            case MERGE_SORT_PARALLELL:
+                startTimeNS = System.nanoTime();
+                ParallellMergeSort.sort(arr, cores);
+                pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
+                break;
             default:
                 pr.elapsedTimeNanoSec = Long.MAX_VALUE;
                 break;
@@ -93,7 +98,8 @@ public class PerformanceTester {
         QUICK_SORT,
         MERGE_SORT,
         JAVA_SORT,
-        JAVA_PARALLELL_SORT
+        JAVA_PARALLELL_SORT,
+        MERGE_SORT_PARALLELL
     }
 
 }

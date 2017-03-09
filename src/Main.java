@@ -17,18 +17,19 @@ public class Main {
         int arrayLength = (int)1E8;
         int iterations = 20;
 
-        warmup();
+        //warmup();
 
 
         PerformanceTester pt = new PerformanceTester(arrayLength);
-        ArrayList<PerformanceResult> results = new ArrayList<>();
+        /*ArrayList<PerformanceResult> results = new ArrayList<>();
 
         results.addAll(pt.test(0, PerformanceTester.SortType.JAVA_SORT, iterations));
-        results.addAll(pt.test(0, PerformanceTester.SortType.JAVA_PARALLELL_SORT, iterations));
-        results.addAll(pt.test(0, PerformanceTester.SortType.QUICK_SORT, iterations));
-        results.addAll(pt.test(0, PerformanceTester.SortType.MERGE_SORT, iterations));
+        */
 
-        printToFile(results);
+        PerformanceResult pr = pt.test(0, PerformanceTester.SortType.MERGE_SORT_PARALLELL);
+        System.out.println(pr);
+
+        //printToFile(results);
     }
 
 
@@ -40,6 +41,7 @@ public class Main {
         pt.test(0, PerformanceTester.SortType.JAVA_PARALLELL_SORT);
         pt.test(0, PerformanceTester.SortType.MERGE_SORT);
         pt.test(0, PerformanceTester.SortType.QUICK_SORT);
+        pt.test(0, PerformanceTester.SortType.MERGE_SORT_PARALLELL);
         System.out.println("Warmup completed!\n\n");
 
     }

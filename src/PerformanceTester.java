@@ -15,71 +15,49 @@ public class PerformanceTester {
         }
     }
 
-    public List<PerformanceResult> test(int cores, SortType sortType, int iterations){
+    public List<PerformanceResult> test(int cores, SortStrategy sortStrategy, int iterations){
         ArrayList<PerformanceResult> results = new ArrayList<>();
-        System.out.println("Beginning batch job of " + sortType.toString());
+
+        System.out.println("Sorting...");
         System.out.println("0/"+iterations);
+
         for(int i = 0; i < iterations;i++){
-            results.add(test(cores, sortType));
-            System.out.println((i+1)+"/"+iterations + "("+(((float)i/(float)iterations)*100)+"%)");
+            results.add(test(cores, sortStrategy));
+            System.out.println((i+1)+"/"+iterations + "("+(int)((((float)i/(float)iterations)*100))+"%)");
         }
 
-        System.out.println(sortType.toString() + " completed.");
+        System.out.println("Array sorted.");
         return results;
     }
 
-    public PerformanceResult test(int cores, SortType sortType){
-
-        System.gc();
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public PerformanceResult test(int cores, SortStrategy sortStrategy){
+        garbageCollect();
 
         float[] arr = new float[templateArray.length];
 
         System.arraycopy(templateArray, 0, arr, 0, templateArray.length);
 
         PerformanceResult pr = new PerformanceResult();
-        pr.sortType = sortType;
 
-        long startTimeNS;
+        long startTimeNS = System.nanoTime();
 
-        switch(sortType){
-            case QUICK_SORT:
-                startTimeNS = System.nanoTime();
-                QuickSort.sort(arr);
-                pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
-                break;
-            case MERGE_SORT:
-                startTimeNS = System.nanoTime();
-                MergeSort.sort(arr);
-                pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
-                break;
-            case JAVA_PARALLELL_SORT:
-                startTimeNS = System.nanoTime();
-                java.util.Arrays.parallelSort(arr);
-                pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
-                break;
-            case JAVA_SORT:
-                startTimeNS = System.nanoTime();
-                java.util.Arrays.sort(arr);
-                pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
-                break;
-            case MERGE_SORT_PARALLELL:
-                startTimeNS = System.nanoTime();
-                ParallellMergeSort.sort(arr, cores);
-                pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
-                break;
-            default:
-                pr.elapsedTimeNanoSec = Long.MAX_VALUE;
-                break;
-        }
+        sortStrategy.sort(arr, cores);
+
+        pr.elapsedTimeNanoSec = System.nanoTime() - startTimeNS;
 
         pr.sorted = checkIfSorted(arr);
         return pr;
+    }
+
+    private void garbageCollect(){
+
+        System.gc();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean checkIfSorted(float[] arr){
@@ -92,14 +70,4 @@ public class PerformanceTester {
 
         return true;
     }
-
-
-    public enum SortType{
-        QUICK_SORT,
-        MERGE_SORT,
-        JAVA_SORT,
-        JAVA_PARALLELL_SORT,
-        MERGE_SORT_PARALLELL
-    }
-
 }

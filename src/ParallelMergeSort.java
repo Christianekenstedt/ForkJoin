@@ -7,11 +7,11 @@ import java.util.concurrent.ForkJoinTask;
 /**
  * Created by Christian & Anton 2017-03-09
  */
-public class ParallellMergeSort {
+public class ParallelMergeSort implements SortStrategy{
 
-    public static float[] sort(float[] a, int cores){
+    public float[] sort(float[] a, int cores){
 
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        ForkJoinPool forkJoinPool = new ForkJoinPool(cores);
 
         MergeSortTask rootTask = new MergeSortTask(a);
 
@@ -26,8 +26,4 @@ public class ParallellMergeSort {
         }
         return null;
     }
-
-
-
-
 }

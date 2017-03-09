@@ -1,13 +1,19 @@
 /**
  * Created by chris on 2016-02-17.
  */
-public class QuickSort {
-    public static float[] sort(float[] a){
+public class QuickSort implements SortStrategy {
+
+    @Override
+    public float[] sort(float[] a, int cores) {
+        return sort(a);
+    }
+
+    public float[] sort(float[] a){
         quickSort(a, 0, a.length-1);
         return a;
     }
 
-    private static float[] quickSort(float[] a, int first, int last) {
+    private float[] quickSort(float[] a, int first, int last) {
         if (first < last){
             int pivIndex = partition(a, first, last);
             quickSort(a, first, pivIndex-1);
@@ -16,7 +22,7 @@ public class QuickSort {
         return a;
     }
 
-    private static int partition(float[] a, int first, int last) {
+    private int partition(float[] a, int first, int last) {
         float pivot = a[first];
         int up = first;
         int down = last;
@@ -39,4 +45,6 @@ public class QuickSort {
 
         return down;
     }
+
+
 }

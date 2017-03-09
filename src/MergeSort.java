@@ -3,8 +3,13 @@ import java.util.Arrays;
 /**
  * Created by chris on 2016-02-17.
  */
-public class MergeSort {
-    public static float[] sort(float[] a){
+public class MergeSort implements SortStrategy{
+
+    public float[] sort(float[] a, int cores){
+        return sort(a);
+    }
+
+    public float[] sort(float[] a){
 
         if (a.length == 1) return a;
 
@@ -20,7 +25,7 @@ public class MergeSort {
         return merge(b,c,a);
     }
 
-    private static float[] merge(float[] a, float[] b, float[]c){
+    private float[] merge(float[] a, float[] b, float[]c){
         int indexa=0, indexb=0, indexc=0;
 
         while (indexa < a.length && indexb < b.length){

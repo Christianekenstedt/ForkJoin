@@ -1,12 +1,8 @@
-import javax.swing.text.DateFormatter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.math.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -14,74 +10,53 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int arrayLength = (int)1E8;
-        int iterations = 20;
+        int arrayLength = (int)1E8;                       //length of array
+        int iterations = 5;                               //number of iterations to test
+        SortStrategy strategy = new ParallelMergeSort(); //sorting strategy to use
+        String fileName = "PMergeSort";                   //save results with this filename
 
-        //warmup();
-
+        warmup(strategy);
 
         PerformanceTester pt = new PerformanceTester(arrayLength);
-        /*ArrayList<PerformanceResult> results = new ArrayList<>();
+        ArrayList<PerformanceResult> results = new ArrayList<>();
 
-        results.addAll(pt.test(0, PerformanceTester.SortType.JAVA_SORT, iterations));
-        */
+        results.addAll(pt.test(1, strategy, iterations));
+        printToFile(results, fileName+"_c1");
 
-        PerformanceResult pr = pt.test(0, PerformanceTester.SortType.MERGE_SORT_PARALLELL);
-        System.out.println(pr);
+        results.clear();
+        results.addAll(pt.test(2, new ParallelMergeSort(), iterations));
+        printToFile(results, fileName+"_c2");
 
-        //printToFile(results);
-    }
+        results.clear();
+        results.addAll(pt.test(4, new ParallelMergeSort(), iterations));
+        printToFile(results, fileName+"_c4");
 
+        results.clear();
+        results.addAll(pt.test(6, new ParallelMergeSort(), iterations));
+        printToFile(results, fileName+"_c6");
 
-
-    private static void warmup(){
-        System.out.println("JVM warmup started");
-        PerformanceTester pt = new PerformanceTester((int)1E6);
-        pt.test(0, PerformanceTester.SortType.JAVA_SORT);
-        pt.test(0, PerformanceTester.SortType.JAVA_PARALLELL_SORT);
-        pt.test(0, PerformanceTester.SortType.MERGE_SORT);
-        pt.test(0, PerformanceTester.SortType.QUICK_SORT);
-        pt.test(0, PerformanceTester.SortType.MERGE_SORT_PARALLELL);
-        System.out.println("Warmup completed!\n\n");
+        results.clear();
+        results.addAll(pt.test(8, new ParallelMergeSort(), iterations));
+        printToFile(results, fileName+"_c8");
 
     }
 
 
-    private static void printToFile(List<PerformanceResult> results){
+
+    private static void warmup(SortStrategy strategy){
+        PerformanceTester pt = new PerformanceTester((int)1E3);
+        pt.test(0, strategy);
+    }
+
+
+    private static void printToFile(List<PerformanceResult> results, String name){
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH_mm_ss");
         try {
-            FileWriter fw = new FileWriter(df.format(new Date())+".csv");
-
-            fw.write(PerformanceTester.SortType.QUICK_SORT.toString()+";");
-            for(PerformanceResult pr : results){
-                if(pr.sortType.equals(PerformanceTester.SortType.QUICK_SORT))
-                    fw.write("" + pr.elapsedTimeNanoSec+";");
-            }
-
-            fw.write("\n");
-            fw.write(PerformanceTester.SortType.MERGE_SORT.toString()+";");
+            FileWriter fw = new FileWriter(name + df.format(new Date())+".csv");
 
             for(PerformanceResult pr : results){
-                if(pr.sortType.equals(PerformanceTester.SortType.MERGE_SORT))
-                    fw.write("" + pr.elapsedTimeNanoSec+";");
+                fw.write(pr.elapsedTimeNanoSec+";");
             }
-
-            fw.write("\n");
-            fw.write(PerformanceTester.SortType.JAVA_PARALLELL_SORT.toString()+";");
-
-            for(PerformanceResult pr : results){
-                if(pr.sortType.equals(PerformanceTester.SortType.JAVA_PARALLELL_SORT))
-                    fw.write("" + pr.elapsedTimeNanoSec+";");
-            }
-
-            fw.write("\n");
-            fw.write(PerformanceTester.SortType.JAVA_SORT.toString()+";");
-
-            for(PerformanceResult pr : results){
-                if(pr.sortType.equals(PerformanceTester.SortType.JAVA_SORT))
-                    fw.write("" + pr.elapsedTimeNanoSec+";");
-            }
-
 
             fw.close();
 

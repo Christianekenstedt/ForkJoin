@@ -10,12 +10,10 @@ public class PerformanceTester {
         for(int i = 0; i < templateArray.length; i++){
             templateArray[i] = (float)Math.random();
         }
-        System.out.println("Array initialized");
     }
 
     public PerformanceResult test(int cores, SortType sortType){
 
-        System.out.println("Collecting garbage...");
         System.gc();
 
         try {
@@ -24,14 +22,12 @@ public class PerformanceTester {
             e.printStackTrace();
         }
 
-
-
-        PerformanceResult pr = new PerformanceResult();
-
         float[] arr = new float[templateArray.length];
 
         System.arraycopy(templateArray, 0, arr, 0, templateArray.length);
 
+        PerformanceResult pr = new PerformanceResult();
+        pr.sortType = sortType;
 
         long startTimeNS;
 

@@ -17,10 +17,14 @@ public class PerformanceTester {
 
     public List<PerformanceResult> test(int cores, SortType sortType, int iterations){
         ArrayList<PerformanceResult> results = new ArrayList<>();
-
-        for(int i = 0; i < iterations;i++)
+        System.out.println("Beginning batch job of " + sortType.toString());
+        System.out.println("0/"+iterations);
+        for(int i = 0; i < iterations;i++){
             results.add(test(cores, sortType));
+            System.out.println((i+1)+"/"+iterations + "("+(((float)i/(float)iterations)*100)+"%)");
+        }
 
+        System.out.println(sortType.toString() + " completed.");
         return results;
     }
 
@@ -42,8 +46,6 @@ public class PerformanceTester {
         pr.sortType = sortType;
 
         long startTimeNS;
-
-        System.out.println("Starting " + sortType.toString());
 
         switch(sortType){
             case QUICK_SORT:
@@ -72,9 +74,6 @@ public class PerformanceTester {
         }
 
         pr.sorted = checkIfSorted(arr);
-
-
-        System.out.println("Completed!\n");
         return pr;
     }
 

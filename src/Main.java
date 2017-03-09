@@ -14,10 +14,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        warmup();
-
         int arrayLength = (int)1E8;
         int iterations = 20;
+
+        warmup();
 
 
         PerformanceTester pt = new PerformanceTester(arrayLength);
@@ -53,7 +53,7 @@ public class Main {
             fw.write(PerformanceTester.SortType.QUICK_SORT.toString()+";");
             for(PerformanceResult pr : results){
                 if(pr.sortType.equals(PerformanceTester.SortType.QUICK_SORT))
-                    fw.write("" + pr.elapsedTimeNanoSec/1.0E9+";");
+                    fw.write("" + pr.elapsedTimeNanoSec+";");
             }
 
             fw.write("\n");
@@ -61,7 +61,7 @@ public class Main {
 
             for(PerformanceResult pr : results){
                 if(pr.sortType.equals(PerformanceTester.SortType.MERGE_SORT))
-                    fw.write("" + pr.elapsedTimeNanoSec/1.0E9);
+                    fw.write("" + pr.elapsedTimeNanoSec+";");
             }
 
             fw.write("\n");
@@ -69,7 +69,7 @@ public class Main {
 
             for(PerformanceResult pr : results){
                 if(pr.sortType.equals(PerformanceTester.SortType.JAVA_PARALLELL_SORT))
-                    fw.write("" + pr.elapsedTimeNanoSec/1.0E9);
+                    fw.write("" + pr.elapsedTimeNanoSec+";");
             }
 
             fw.write("\n");
@@ -77,7 +77,7 @@ public class Main {
 
             for(PerformanceResult pr : results){
                 if(pr.sortType.equals(PerformanceTester.SortType.JAVA_SORT))
-                    fw.write("" + pr.elapsedTimeNanoSec/1.0E9);
+                    fw.write("" + pr.elapsedTimeNanoSec+";");
             }
 
 

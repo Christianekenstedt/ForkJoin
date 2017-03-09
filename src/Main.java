@@ -14,31 +14,19 @@ public class Main {
 
     public static void main(String[] args) {
 
-        ArrayList<PerformanceResult> results = new ArrayList<>();
-
         warmup();
 
-        int numbers = (int)1E8;
+        int arrayLength = (int)1E8;
+        int iterations = 20;
 
-        PerformanceTester pt = new PerformanceTester(numbers);
 
-        PerformanceResult javaSort = pt.test(0, PerformanceTester.SortType.JAVA_SORT);
-        javaSort.printResult();
-        results.add(javaSort);
+        PerformanceTester pt = new PerformanceTester(arrayLength);
+        ArrayList<PerformanceResult> results = new ArrayList<>();
 
-        PerformanceResult javaParallellSort = pt.test(0, PerformanceTester.SortType.JAVA_PARALLELL_SORT);
-        javaParallellSort.printResult();
-        results.add(javaParallellSort);
-
-        PerformanceResult quickSort = pt.test(0, PerformanceTester.SortType.QUICK_SORT);
-        quickSort.printResult();
-        results.add(quickSort);
-
-        /*
-        PerformanceResult mergeSort = pt.test(0, PerformanceTester.SortType.MERGE_SORT);
-        mergeSort.printResult();
-        results.add(mergeSort);
-        */
+        results.addAll(pt.test(0, PerformanceTester.SortType.JAVA_SORT, iterations));
+        results.addAll(pt.test(0, PerformanceTester.SortType.JAVA_PARALLELL_SORT, iterations));
+        results.addAll(pt.test(0, PerformanceTester.SortType.QUICK_SORT, iterations));
+        results.addAll(pt.test(0, PerformanceTester.SortType.MERGE_SORT, iterations));
 
         printToFile(results);
     }

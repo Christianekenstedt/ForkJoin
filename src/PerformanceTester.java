@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Anton on 2017-03-09.
  */
@@ -10,6 +13,15 @@ public class PerformanceTester {
         for(int i = 0; i < templateArray.length; i++){
             templateArray[i] = (float)Math.random();
         }
+    }
+
+    public List<PerformanceResult> test(int cores, SortType sortType, int iterations){
+        ArrayList<PerformanceResult> results = new ArrayList<>();
+
+        for(int i = 0; i < iterations;i++)
+            results.add(test(cores, sortType));
+
+        return results;
     }
 
     public PerformanceResult test(int cores, SortType sortType){

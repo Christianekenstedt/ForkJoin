@@ -11,11 +11,11 @@ public class Main {
     public static void main(String[] args) {
 
         int arrayLength = (int)1E8;                       //length of array
-        int iterations = 5;                               //number of iterations to test
+        int iterations = 20;                               //number of iterations to test
         SortStrategy strategy = new ParallelMergeSort(); //sorting strategy to use
         String fileName = "PMergeSort";                   //save results with this filename
 
-        warmup(strategy);
+
 
         PerformanceTester pt = new PerformanceTester(arrayLength);
         ArrayList<PerformanceResult> results = new ArrayList<>();
@@ -42,17 +42,10 @@ public class Main {
     }
 
 
-
-    private static void warmup(SortStrategy strategy){
-        PerformanceTester pt = new PerformanceTester((int)1E3);
-        pt.test(0, strategy);
-    }
-
-
     private static void printToFile(List<PerformanceResult> results, String name){
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH_mm_ss");
         try {
-            FileWriter fw = new FileWriter(name + df.format(new Date())+".csv");
+            FileWriter fw = new FileWriter( name + "_"+ df.format(new Date())+".txt");
 
             for(PerformanceResult pr : results){
                 fw.write(pr.elapsedTimeNanoSec+";");

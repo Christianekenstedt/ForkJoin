@@ -5,13 +5,14 @@ import java.util.concurrent.RecursiveTask;
  * Created by Anton on 2017-03-09.
  */
 public class MergeSortTask extends RecursiveTask<float[]> {
-    int threshold = 1000;
+    int threshold = 7000;
 
     float[] a;
 
 
     public MergeSortTask(float[] a){
         this.a = a;
+
     }
 
     @Override

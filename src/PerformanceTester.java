@@ -17,13 +17,20 @@ public class PerformanceTester {
 
     public List<PerformanceResult> test(int cores, SortStrategy sortStrategy, int iterations){
         ArrayList<PerformanceResult> results = new ArrayList<>();
+        System.out.println("Warmup...");
+        test(cores, sortStrategy);
 
         System.out.println("Sorting...");
-        System.out.println("0/"+iterations);
 
-        for(int i = 0; i < iterations;i++){
-            results.add(test(cores, sortStrategy));
-            System.out.println((i+1)+"/"+iterations + "("+(int)((((float)i/(float)iterations)*100))+"%)");
+        for(int i = 0; i < iterations+1;i++){
+            if (i !=0){
+                results.add(test(cores, sortStrategy));
+                System.out.println((i)+"/"+iterations + "("+(int)((((float)(i)/(float)iterations)*100))+"%)");
+            }else{
+                test(cores, sortStrategy);
+                test(cores, sortStrategy);
+            }
+
         }
 
         System.out.println("Array sorted.");
@@ -54,7 +61,7 @@ public class PerformanceTester {
         System.gc();
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

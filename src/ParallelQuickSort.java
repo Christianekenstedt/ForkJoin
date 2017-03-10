@@ -13,7 +13,7 @@ public class ParallelQuickSort implements SortStrategy{
 
         QuickSortTask rootTask = new QuickSortTask(a, 0, a.length-1);
 
-        rootTask.invoke();
+        forkJoinPool.invoke(rootTask);
 
         try {
             return rootTask.get();
